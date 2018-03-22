@@ -14,7 +14,7 @@ for i in filelist:
 for i in filelist:
     filelistl2 = os.listdir(dir+'\\'+i)
     for j in filelistl2:
-        curname = os.path.join(outdir,j)
+        curname = os.path.join(dir+'\\'+i,j)
         print (curname)
         fileinfo.write(curname+','+i+"\n")
 
