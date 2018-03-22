@@ -1,5 +1,6 @@
 import tensorflow as tf
 import time
+import matplotlib.pyplot as plt
 from image_processing import image_preprocessing
 import csv
 
@@ -24,8 +25,26 @@ def distorted_inputs():
 
     filenames = [ d['filename'] for d in data ]
     label_indexes = [ d['label_name'] for d in data ]
+    print (filenames)
+    print (label_indexes)
+
+    num_preprocess_threads = 4
+    images_and_labels = []
+    for thread_id in range(num_preprocess_threads):
+        image_buffer = tf.read_file(filename)
+        bbox = []
+        train = True
+        image = image_preprocessing(image_buffer, bbox, train, thread_id)
+        images_and_labels.append([image, label_index])
+
+    for i in filenames:
+        print(i)
+        file_contents = tf.read_file(i)
+        image_read = tf.image.decode_jpeg(file_contents)
+
 
     filename, label_index = tf.train.slice_input_producer([filenames, label_indexes], shuffle=True)
+
 
 
     return
