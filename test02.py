@@ -25,25 +25,21 @@ def distorted_inputs():
 
     filenames = [ d['filename'] for d in data ]
     label_indexes = [ d['label_name'] for d in data ]
-    print (filenames)
-    print (label_indexes)
-
-    num_preprocess_threads = 4
-    images_and_labels = []
-    for thread_id in range(num_preprocess_threads):
-        image_buffer = tf.read_file(filename)
-        bbox = []
-        train = True
-        image = image_preprocessing(image_buffer, bbox, train, thread_id)
-        images_and_labels.append([image, label_index])
+    sess.run(tf.global_variables_initializer())
+    x=0
 
     for i in filenames:
-        print(i)
+        x+=1
         file_contents = tf.read_file(i)
         image_read = tf.image.decode_jpeg(file_contents)
-
-
-    filename, label_index = tf.train.slice_input_producer([filenames, label_indexes], shuffle=True)
+        imagesize = tf.constant([333,333])
+        img_data = tf.image.resize_images(image_read,imagesize,method=0)
+        print (img_data)
+        plt.figure()
+        plt.imshow(sess.run(img_data))
+        plt.show()
+        if x == 2:
+            break
 
 
 
